@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding RSVP</title>
+    <style>
+        :root {
+            --sage-green: #95A5A6;
+            --light-sage: #E8F3E8;
+            --forest-green: #2E7D32;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Cormorant Garamond', serif;
+            background-color: var(--light-sage);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .leaf-decoration {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.1;
+        }
+
+        .top-left {
+            top: -20px;
+            left: -20px;
+            transform: rotate(-45deg);
+        }
+
+        .bottom-right {
+            bottom: -20px;
+            right: -20px;
+            transform: rotate(135deg);
+        }
+
+        h1 {
+            color: var(--forest-green);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .slide {
+            display: none;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            color: var(--forest-green);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--sage-green);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--forest-green);
+        }
+
+        button {
+            background-color: var(--forest-green);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1B5E20;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: var(--forest-green);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <img src="/api/placeholder/150/150" alt="Leaf decoration" class="leaf-decoration top-left">
+        <img src="/api/placeholder/150/150" alt="Leaf decoration" class="leaf-decoration bottom-right">
+        
+        <div class="slide active" id="invitation">
+            <h1>Wedding Invitation</h1>
+            <p class="text-center">We joyfully request the pleasure of your company as we celebrate our love and commitment.</p>
+            <button onclick="nextSlide()">RSVP Now</button>
+        </div>
+
+        <div class="slide" id="rsvp-form">
+            <h1>RSVP</h1>
+            <form id="rsvpForm" name="wedding-rsvp" netlify>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="attending">Will you be attending?</label>
+                    <select id="attending" name="attending" required>
+                        <option value="">Please select</option>
+                        <option value="yes">Joyfully Accept</option>
+                        <option value="no">Regretfully Decline</option>
+                    </select>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" onclick="previousSlide()">Back</button>
+                    <button type="submit">Submit RSVP</button>
+                </div>
+            </form>
+            <div class="success-message" id="successMessage">
+                Thank you for your RSVP!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function nextSlide() {
+            document.getElementById('invitation').classList.remove('active');
+            document.getElementById('rsvp-form').classList.add('active');
+        }
+
+        function previousSlide() {
+            document.getElementById('rsvp-form').classList.remove('active');
+            document.getElementById('invitation').classList.add('active');
+        }
+
+        // Show success message after form submission
+        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'block';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

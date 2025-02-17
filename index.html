@@ -3,23 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding RSVP</title>
+    <title>Priscilla & Rayan's Wedding RSVP</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sage-green: #95A5A6;
-            --light-sage: #E8F3E8;
-            --forest-green: #2E7D32;
+            --navy-blue: #1B365C;
+            --sage-green: #7C8D78;
+            --light-beige: #FAF7F2;
+            --gold: #D4B78F;
         }
 
         body {
             margin: 0;
             font-family: 'Cormorant Garamond', serif;
-            background-color: var(--light-sage);
+            background-color: var(--light-beige);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            background-image: linear-gradient(rgba(250, 247, 242, 0.9), rgba(250, 247, 242, 0.9)),
+                url('/api/placeholder/200/200');
+            background-size: 200px;
+            background-repeat: repeat;
         }
 
         .container {
@@ -27,41 +32,46 @@
             width: 90%;
             margin: 2rem auto;
             background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--gold);
         }
 
-        .leaf-decoration {
+        .botanical-border {
             position: absolute;
-            width: 150px;
-            height: 150px;
-            opacity: 0.1;
-        }
-
-        .top-left {
-            top: -20px;
-            left: -20px;
-            transform: rotate(-45deg);
-        }
-
-        .bottom-right {
-            bottom: -20px;
-            right: -20px;
-            transform: rotate(135deg);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.15;
+            background-image: url('/api/placeholder/800/800');
+            background-size: cover;
         }
 
         h1 {
-            color: var(--forest-green);
+            color: var(--navy-blue);
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+
+        .date {
+            text-align: center;
+            color: var(--navy-blue);
+            font-size: 1.5rem;
             margin-bottom: 2rem;
         }
 
         .slide {
             display: none;
+            position: relative;
+            z-index: 1;
         }
 
         .slide.active {
@@ -70,47 +80,55 @@
 
         p {
             margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #333;
         }
 
         label {
             display: block;
-            color: var(--forest-green);
+            color: var(--navy-blue);
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         input[type="text"],
         input[type="email"],
         select {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--sage-green);
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            padding: 1rem;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-family: 'Cormorant Garamond', serif;
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
         }
 
         input[type="text"]:focus,
         input[type="email"]:focus,
         select:focus {
             outline: none;
-            border-color: var(--forest-green);
+            border-color: var(--navy-blue);
+            box-shadow: 0 0 5px rgba(27, 54, 92, 0.2);
         }
 
         button {
-            background-color: var(--forest-green);
+            background-color: var(--navy-blue);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            border-radius: 5px;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0.5rem;
         }
 
         button:hover {
-            background-color: #1B5E20;
+            background-color: #2B466C;
+            transform: translateY(-2px);
         }
 
         .text-center {
@@ -119,25 +137,46 @@
 
         .navigation {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 1rem;
             margin-top: 2rem;
         }
 
         .success-message {
             display: none;
             text-align: center;
-            color: var(--forest-green);
-            font-size: 1.2rem;
-            margin-top: 1rem;
+            color: var(--navy-blue);
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: rgba(250, 247, 242, 0.9);
+            border-radius: 8px;
+            border: 1px solid var(--gold);
+        }
+
+        .venue-details {
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--navy-blue);
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="botanical-border"></div>
+        
         <div class="slide active" id="invitation">
-            <h1>Wedding Invitation</h1>
-            <p class="text-center">We joyfully request the pleasure of your company as we celebrate our love and commitment.</p>
-            <button onclick="nextSlide()">RSVP Now</button>
+            <h1>Priscilla & Rayan</h1>
+            <div class="date">Saturday, July 19, 2025</div>
+            <div class="venue-details">
+                <p>Madahoki Farm<br>
+                4420 W Hunt Club Rd, Nepean<br>
+                ON K2R 1E7</p>
+            </div>
+            <p class="text-center">Together with their families, we joyfully request the pleasure of your company as we celebrate our love and commitment.</p>
+            <div class="text-center">
+                <button onclick="nextSlide()">RSVP Now</button>
+            </div>
         </div>
 
         <div class="slide" id="rsvp-form">
@@ -154,13 +193,33 @@
                 </p>
                 <p>
                     <label>Will you be attending?
-                        <select name="attending" required>
+                        <select name="attending" required onchange="toggleGuestSection(this.value)">
                             <option value="">Please select</option>
                             <option value="yes">Joyfully Accept</option>
                             <option value="no">Regretfully Decline</option>
                         </select>
                     </label>
                 </p>
+                <div id="guestSection" style="display: none;">
+                    <p>
+                        <label>Will you be bringing guests?
+                            <select name="bringing_guests" onchange="toggleGuestCount(this.value)">
+                                <option value="no">No additional guests</option>
+                                <option value="yes">Yes, I will bring guests</option>
+                            </select>
+                        </label>
+                    </p>
+                    <p id="guestCountSection" style="display: none;">
+                        <label>Number of additional guests
+                            <select name="guest_count">
+                                <option value="1">1 guest</option>
+                                <option value="2">2 guests</option>
+                                <option value="3">3 guests</option>
+                                <option value="4">4 guests</option>
+                            </select>
+                        </label>
+                    </p>
+                </div>
                 <div class="navigation">
                     <button type="button" onclick="previousSlide()">Back</button>
                     <button type="submit">Send RSVP</button>
@@ -183,8 +242,22 @@
             document.getElementById('invitation').classList.add('active');
         }
 
-        // Show success message after form submission
-        document.querySelector('form').addEventListener('submit', function() {
+        function toggleGuestSection(value) {
+            const guestSection = document.getElementById('guestSection');
+            guestSection.style.display = value === 'yes' ? 'block' : 'none';
+            if (value !== 'yes') {
+                document.querySelector('[name="bringing_guests"]').value = 'no';
+                document.getElementById('guestCountSection').style.display = 'none';
+            }
+        }
+
+        function toggleGuestCount(value) {
+            const guestCountSection = document.getElementById('guestCountSection');
+            guestCountSection.style.display = value === 'yes' ? 'block' : 'none';
+        }
+
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
             setTimeout(() => {
                 document.getElementById('successMessage').style.display = 'block';
             }, 1000);

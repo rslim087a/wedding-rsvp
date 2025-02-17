@@ -21,18 +21,14 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-image: linear-gradient(rgba(250, 247, 242, 0.9), rgba(250, 247, 242, 0.9)),
-                url('/api/placeholder/200/200');
-            background-size: 200px;
-            background-repeat: repeat;
+            padding: 2rem 1rem;
         }
 
         .container {
             max-width: 800px;
-            width: 90%;
-            margin: 2rem auto;
+            width: 100%;
+            margin: 0 auto;
             background: white;
-            padding: 3rem;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -40,38 +36,18 @@
             border: 1px solid var(--gold);
         }
 
-        .botanical-border {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .main-image {
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0.15;
-            background-image: url('/api/placeholder/800/800');
-            background-size: cover;
+            height: auto;
+            display: block;
         }
 
-        h1 {
-            color: var(--navy-blue);
-            text-align: center;
-            font-size: 2.8rem;
-            margin-bottom: 2rem;
-            font-weight: normal;
-            line-height: 1.2;
-        }
-
-        .date {
-            text-align: center;
-            color: var(--navy-blue);
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
+        .content {
+            padding: 2rem;
         }
 
         .slide {
             display: none;
-            position: relative;
-            z-index: 1;
         }
 
         .slide.active {
@@ -154,79 +130,85 @@
             border: 1px solid var(--gold);
         }
 
-        .venue-details {
-            text-align: center;
-            margin: 2rem 0;
-            color: var(--navy-blue);
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            .content {
+                padding: 1.5rem;
+            }
+            
+            button {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+            
+            .navigation {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="botanical-border"></div>
-        
         <div class="slide active" id="invitation">
-            <h1>Priscilla & Rayan</h1>
-            <div class="date">Saturday, July 19, 2025</div>
-            <div class="venue-details">
-                <p>Madahoki Farm<br>
-                4420 W Hunt Club Rd, Nepean<br>
-                ON K2R 1E7</p>
-            </div>
-            <p class="text-center">Together with their families, we joyfully request the pleasure of your company as we celebrate our love and commitment.</p>
-            <div class="text-center">
+            <img src="wedding-2.png" alt="Wedding Invitation" class="main-image">
+            <div class="content text-center">
                 <button onclick="nextSlide()">RSVP Now</button>
             </div>
         </div>
 
         <div class="slide" id="rsvp-form">
-            <h1>RSVP</h1>
-            <form name="wedding-rsvp" netlify>
-                <p>
-                    <label>First Name <input type="text" name="firstname" required /></label>
-                </p>
-                <p>
-                    <label>Last Name <input type="text" name="lastname" required /></label>
-                </p>
-                <p>
-                    <label>Email <input type="email" name="email" required /></label>
-                </p>
-                <p>
-                    <label>Will you be attending?
-                        <select name="attending" required onchange="toggleGuestSection(this.value)">
-                            <option value="">Please select</option>
-                            <option value="yes">Joyfully Accept</option>
-                            <option value="no">Regretfully Decline</option>
-                        </select>
-                    </label>
-                </p>
-                <div id="guestSection" style="display: none;">
+            <img src="wedding-1.png" alt="Priscilla & Rayan" class="main-image">
+            <div class="content">
+                <form name="wedding-rsvp" netlify>
                     <p>
-                        <label>Will you be bringing guests?
-                            <select name="bringing_guests" onchange="toggleGuestCount(this.value)">
-                                <option value="no">No additional guests</option>
-                                <option value="yes">Yes, I will bring guests</option>
+                        <label>First Name <input type="text" name="firstname" required /></label>
+                    </p>
+                    <p>
+                        <label>Last Name <input type="text" name="lastname" required /></label>
+                    </p>
+                    <p>
+                        <label>Email <input type="email" name="email" required /></label>
+                    </p>
+                    <p>
+                        <label>Will you be attending?
+                            <select name="attending" required onchange="toggleGuestSection(this.value)">
+                                <option value="">Please select</option>
+                                <option value="yes">Joyfully Accept</option>
+                                <option value="no">Regretfully Decline</option>
                             </select>
                         </label>
                     </p>
-                    <p id="guestCountSection" style="display: none;">
-                        <label>Number of additional guests
-                            <select name="guest_count">
-                                <option value="1">1 guest</option>
-                                <option value="2">2 guests</option>
-                                <option value="3">3 guests</option>
-                                <option value="4">4 guests</option>
-                            </select>
-                        </label>
-                    </p>
+                    <div id="guestSection" style="display: none;">
+                        <p>
+                            <label>Will you be bringing guests?
+                                <select name="bringing_guests" onchange="toggleGuestCount(this.value)">
+                                    <option value="no">No additional guests</option>
+                                    <option value="yes">Yes, I will bring guests</option>
+                                </select>
+                            </label>
+                        </p>
+                        <p id="guestCountSection" style="display: none;">
+                            <label>Number of additional guests
+                                <select name="guest_count">
+                                    <option value="1">1 guest</option>
+                                    <option value="2">2 guests</option>
+                                    <option value="3">3 guests</option>
+                                    <option value="4">4 guests</option>
+                                </select>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="navigation">
+                        <button type="button" onclick="previousSlide()">Back</button>
+                        <button type="submit">Send RSVP</button>
+                    </div>
+                </form>
+                <div class="success-message" id="successMessage">
+                    Thank you for your RSVP!
                 </div>
-                <div class="navigation">
-                    <button type="button" onclick="previousSlide()">Back</button>
-                    <button type="submit">Send RSVP</button>
-                </div>
-            </form>
-            <div class="success-message" id="successMessage">
-                Thank you for your RSVP!
             </div>
         </div>
     </div>

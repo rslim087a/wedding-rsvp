@@ -54,6 +54,45 @@
             display: block;
         }
 
+        .content.text-center {
+            padding: 0;
+            background: white;
+        }
+
+        .time-info {
+            color: var(--navy-blue);
+            font-size: 1.4rem;
+            margin: 0;
+            padding: 1.5rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .rsvp-button {
+            width: 100%;
+            margin: 0;
+            padding: 1.5rem;
+            background-color: var(--navy-blue);
+            color: white;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            font-family: 'Cormorant Garamond', serif;
+            transition: background-color 0.3s ease;
+        }
+
+        .rsvp-button:hover {
+            background-color: #2B466C;
+        }
+
+        .rsvp-deadline {
+            color: var(--navy-blue);
+            font-size: 1.2rem;
+            margin: 0;
+            padding: 1rem;
+            text-align: center;
+        }
+
         p {
             margin-bottom: 1.5rem;
             font-size: 1.2rem;
@@ -89,7 +128,14 @@
             box-shadow: 0 0 5px rgba(27, 54, 92, 0.2);
         }
 
-        button {
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .navigation button {
             background-color: var(--navy-blue);
             color: white;
             border: none;
@@ -99,23 +145,11 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Cormorant Garamond', serif;
-            margin: 0.5rem;
         }
 
-        button:hover {
+        .navigation button:hover {
             background-color: #2B466C;
             transform: translateY(-2px);
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
         }
 
         .success-message {
@@ -139,13 +173,13 @@
                 padding: 1.5rem;
             }
             
-            button {
-                width: 100%;
-                margin: 0.5rem 0;
-            }
-            
             .navigation {
                 flex-direction: column;
+            }
+            
+            .navigation button {
+                width: 100%;
+                margin: 0.5rem 0;
             }
         }
     </style>
@@ -155,7 +189,9 @@
         <div class="slide active" id="invitation">
             <img src="wedding-2.png" alt="Wedding Invitation" class="main-image">
             <div class="content text-center">
-                <button onclick="nextSlide()">RSVP Now</button>
+                <p class="time-info">4:00 PM - 11:00 PM</p>
+                <button class="rsvp-button" onclick="nextSlide()">RSVP Now</button>
+                <p class="rsvp-deadline">Please RSVP by May 16th</p>
             </div>
         </div>
 

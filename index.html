@@ -242,7 +242,6 @@
         }
     </style>
 </head>
-<!DOCTYPE html>
 
 <body>
     <div class="container">
@@ -308,6 +307,7 @@
                         <p id="childCountSection" style="display: none;">
                             <label>Number of children
                                 <select name="child_count">
+                                    <option value="">Select number of children</option>
                                     <option value="1">1 child</option>
                                     <option value="2">2 children</option>
                                     <option value="3">3 children</option>
@@ -349,9 +349,18 @@
             const guestSection = document.getElementById('guestSection');
             guestSection.style.display = value === 'yes' ? 'block' : 'none';
             if (value !== 'yes') {
-                document.querySelector('[name="bringing_guests"]').value = 'no';
+                // Reset all guest-related values when not attending
+                const guestSelect = document.querySelector('[name="bringing_guests"]');
+                const guestCount = document.querySelector('[name="guest_count"]');
+                const childrenSelect = document.querySelector('[name="bringing_children"]');
+                const childCount = document.querySelector('[name="child_count"]');
+                
+                guestSelect.value = 'no';
+                guestCount.value = '';
+                childrenSelect.value = 'no';
+                childCount.value = '';
+                
                 document.getElementById('guestCountSection').style.display = 'none';
-                document.querySelector('[name="bringing_children"]').value = 'no';
                 document.getElementById('childCountSection').style.display = 'none';
             }
         }
@@ -359,11 +368,17 @@
         function toggleGuestCount(value) {
             const guestCountSection = document.getElementById('guestCountSection');
             guestCountSection.style.display = value === 'yes' ? 'block' : 'none';
+            if (value === 'no') {
+                document.querySelector('[name="guest_count"]').value = '';
+            }
         }
 
         function toggleChildCount(value) {
             const childCountSection = document.getElementById('childCountSection');
             childCountSection.style.display = value === 'yes' ? 'block' : 'none';
+            if (value === 'no') {
+                document.querySelector('[name="child_count"]').value = '';
+            }
         }
 
         // Form submission handler

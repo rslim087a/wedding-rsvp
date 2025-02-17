@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding RSVP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --sage-green: #95A5A6;
@@ -67,7 +68,7 @@
             display: block;
         }
 
-        .form-group {
+        p {
             margin-bottom: 1.5rem;
         }
 
@@ -105,10 +106,15 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-top: 1rem;
         }
 
         button:hover {
             background-color: #1B5E20;
+        }
+
+        .text-center {
+            text-align: center;
         }
 
         .navigation {
@@ -125,13 +131,9 @@
             margin-top: 1rem;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <img src="/api/placeholder/150/150" alt="Leaf decoration" class="leaf-decoration top-left">
-        <img src="/api/placeholder/150/150" alt="Leaf decoration" class="leaf-decoration bottom-right">
-        
         <div class="slide active" id="invitation">
             <h1>Wedding Invitation</h1>
             <p class="text-center">We joyfully request the pleasure of your company as we celebrate our love and commitment.</p>
@@ -140,34 +142,28 @@
 
         <div class="slide" id="rsvp-form">
             <h1>RSVP</h1>
-            <form id="rsvpForm" name="wedding-rsvp" netlify>
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" name="firstName" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" name="lastName" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="attending">Will you be attending?</label>
-                    <select id="attending" name="attending" required>
-                        <option value="">Please select</option>
-                        <option value="yes">Joyfully Accept</option>
-                        <option value="no">Regretfully Decline</option>
-                    </select>
-                </div>
-
+            <form name="wedding-rsvp" netlify>
+                <p>
+                    <label>First Name <input type="text" name="firstname" required /></label>
+                </p>
+                <p>
+                    <label>Last Name <input type="text" name="lastname" required /></label>
+                </p>
+                <p>
+                    <label>Email <input type="email" name="email" required /></label>
+                </p>
+                <p>
+                    <label>Will you be attending?
+                        <select name="attending" required>
+                            <option value="">Please select</option>
+                            <option value="yes">Joyfully Accept</option>
+                            <option value="no">Regretfully Decline</option>
+                        </select>
+                    </label>
+                </p>
                 <div class="navigation">
                     <button type="button" onclick="previousSlide()">Back</button>
-                    <button type="submit">Submit RSVP</button>
+                    <button type="submit">Send RSVP</button>
                 </div>
             </form>
             <div class="success-message" id="successMessage">
@@ -188,7 +184,7 @@
         }
 
         // Show success message after form submission
-        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+        document.querySelector('form').addEventListener('submit', function() {
             setTimeout(() => {
                 document.getElementById('successMessage').style.display = 'block';
             }, 1000);

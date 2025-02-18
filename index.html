@@ -49,41 +49,7 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       border: 1px solid var(--gold);
-    }
-
-    /* Image container with fallback background */
-    .image-container {
-      width: 100%;
-      position: relative;
-      min-height: 300px;
-      background-color: var(--light-beige);
-      background-position: center;
-      background-size: cover;
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .invitation-image {
-      background-image: url('/wedding-2.png');
-    }
-
-    .rsvp-image {
-      background-image: url('/wedding-1.png');
-    }
-
-    /* Fallback content */
-    .image-fallback {
-      text-align: center;
-      padding: 2rem;
-      color: var(--navy-blue);
-    }
-
-    .image-fallback h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+      /* Removed overflow: hidden to avoid input cut‐offs. */
     }
 
     .main-image {
@@ -299,12 +265,11 @@
   <div class="container">
     <!-- Slide 1: Invitation -->
     <div class="slide active" id="invitation">
-      <div class="image-container invitation-image">
-        <div class="image-fallback">
-          <h2>Priscilla & Rayan</h2>
-          <p>We are delighted to invite you to our wedding celebration!</p>
-        </div>
-      </div>
+      <img
+        src="wedding-2.png"
+        alt="Wedding Invitation"
+        class="main-image"
+      />
       <div class="content text-center">
         <p class="time-info">4:00 PM - 11:00 PM</p>
         <button class="rsvp-button" onclick="nextSlide()">
@@ -316,12 +281,11 @@
 
     <!-- Slide 2: RSVP Form -->
     <div class="slide" id="rsvp-form">
-      <div class="image-container rsvp-image">
-        <div class="image-fallback">
-          <h2>Priscilla & Rayan</h2>
-          <p>Please complete your RSVP below</p>
-        </div>
-      </div>
+      <img
+        src="wedding-1.png"
+        alt="Priscilla & Rayan"
+        class="main-image"
+      />
       <div class="content">
         <form
           name="wedding-rsvp"
@@ -405,7 +369,8 @@
             </p>
 
             <p>
-              <label>Are you bringing children? (The venue features a farm with friendly animals)
+              <label
+                >Are you bringing children? (The venue features a farm with friendly animals)
                 <select
                   name="bringing_children"
                   onchange="toggleChildCount(this.value)"
@@ -457,31 +422,6 @@
   </div>
 
   <script>
-    // Verify images are loading and remove fallback content if they do
-    window.addEventListener('DOMContentLoaded', function() {
-      verifyImages();
-    });
-
-    function verifyImages() {
-      // Try to load images and check if they exist
-      const image1 = new Image();
-      const image2 = new Image();
-      
-      image1.onload = function() {
-        // If image1 loads successfully, hide the fallback in the first slide
-        document.querySelector('.invitation-image .image-fallback').style.display = 'none';
-      };
-      
-      image2.onload = function() {
-        // If image2 loads successfully, hide the fallback in the second slide
-        document.querySelector('.rsvp-image .image-fallback').style.display = 'none';
-      };
-
-      // Set paths with absolute URLs from site root
-      image1.src = '/wedding-2.png';
-      image2.src = '/wedding-1.png';
-    }
-
     function nextSlide() {
       document
         .getElementById("invitation")
@@ -507,9 +447,9 @@
       if (value !== "yes") {
         // Reset guest-related fields if "No"
         document.querySelector('[name="bringing_guests"]').value = "no";
-        document.querySelector('[name="guest_count"]').value = "0";
+        document.querySelector('[name="guest_count"]').value = "";
         document.querySelector('[name="bringing_children"]').value = "no";
-        document.querySelector('[name="child_count"]').value = "0";
+        document.querySelector('[name="child_count"]').value = "";
         document.getElementById("guestCountSection").style.display = "none";
         document.getElementById("childCountSection").style.display = "none";
       }
@@ -519,7 +459,7 @@
       const guestCountSection = document.getElementById("guestCountSection");
       guestCountSection.style.display = value === "yes" ? "block" : "none";
       if (value === "no") {
-        document.querySelector('[name="guest_count"]').value = "0";
+        document.querySelector('[name="guest_count"]').value = "";
       }
     }
 
@@ -527,7 +467,7 @@
       const childCountSection = document.getElementById("childCountSection");
       childCountSection.style.display = value === "yes" ? "block" : "none";
       if (value === "no") {
-        document.querySelector('[name="child_count"]').value = "0";
+        document.querySelector('[name="child_count"]').value = "";
       }
     }
 

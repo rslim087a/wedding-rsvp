@@ -4,10 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Priscilla & Rayan's Wedding RSVP</title>
+
+  <!-- One-Time Forced Reload Script (only once ever) -->
+  <script>
+    // If we haven't reloaded before, set the flag and reload once.
+    if (!localStorage.getItem("oneTimeReload")) {
+      localStorage.setItem("oneTimeReload", "true");
+      window.location.reload();
+    }
+  </script>
+
+  <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap"
     rel="stylesheet"
   />
+
   <style>
     /* 1) Ensure everything respects container boundaries */
     *,

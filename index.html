@@ -30,26 +30,14 @@
       width: 100%;
       background-color: var(--light-beige);
       font-family: "Cormorant Garamond", serif;
-      min-height: 100vh;
-    }
-
-    /* 
-      2) We'll show a loading message by default, 
-         hide the main content container initially 
-    */
-    #loading-message {
-      text-align: center;
-      font-size: 1.5rem;
-      margin-top: 3rem;
-      color: var(--navy-blue);
-    }
-
-    #app-container {
-      display: none; /* hidden until images have loaded */
-      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
+    }
+
+    body {
+      /* Extra padding so content isn't squashed at edges */
       padding: 2rem 1rem;
     }
 
@@ -61,6 +49,7 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       border: 1px solid var(--gold);
+      /* Removed overflow: hidden to avoid input cut‐offs. */
     }
 
     .main-image {
@@ -149,7 +138,7 @@
       font-size: 1.2rem;
     }
 
-    /* 3) Ensure form elements don't overflow their container */
+    /* 2) Ensure form elements don't overflow their container */
     input[type="text"],
     input[type="email"],
     select {
@@ -273,182 +262,166 @@
   </style>
 </head>
 <body>
-  <!-- 4) Show a loading message while images are loading -->
-  <div id="loading-message">
-    Loading… Please wait.
-  </div>
-
-  <!-- 5) Main app container hidden until onload -->
-  <div id="app-container">
-    <div class="container">
-      <!-- Slide 1: Invitation -->
-      <div class="slide active" id="invitation">
-        <img
-          src="wedding-2.png"
-          alt="Wedding Invitation"
-          class="main-image"
-        />
-        <div class="content text-center">
-          <p class="time-info">4:00 PM - 11:00 PM</p>
-          <button class="rsvp-button" onclick="nextSlide()">
-            RSVP Now
-          </button>
-          <p class="rsvp-deadline">Please RSVP by May 16th</p>
-        </div>
+  <div class="container">
+    <!-- Slide 1: Invitation -->
+    <div class="slide active" id="invitation">
+      <img
+        src="wedding-2.png"
+        alt="Wedding Invitation"
+        class="main-image"
+      />
+      <div class="content text-center">
+        <p class="time-info">4:00 PM - 11:00 PM</p>
+        <button class="rsvp-button" onclick="nextSlide()">
+          RSVP Now
+        </button>
+        <p class="rsvp-deadline">Please RSVP by May 16th</p>
       </div>
+    </div>
 
-      <!-- Slide 2: RSVP Form -->
-      <div class="slide" id="rsvp-form">
-        <img
-          src="wedding-1.png"
-          alt="Priscilla & Rayan"
-          class="main-image"
-        />
-        <div class="content">
-          <form
-            name="wedding-rsvp"
-            method="POST"
-            data-netlify="true"
-          >
-            <input
-              type="hidden"
-              name="form-name"
-              value="wedding-rsvp"
-            />
+    <!-- Slide 2: RSVP Form -->
+    <div class="slide" id="rsvp-form">
+      <img
+        src="wedding-1.png"
+        alt="Priscilla & Rayan"
+        class="main-image"
+      />
+      <div class="content">
+        <form
+          name="wedding-rsvp"
+          method="POST"
+          data-netlify="true"
+        >
+          <input
+            type="hidden"
+            name="form-name"
+            value="wedding-rsvp"
+          />
 
+          <p>
+            <label>First Name
+              <input
+                type="text"
+                name="firstname"
+                required
+              />
+            </label>
+          </p>
+
+          <p>
+            <label>Last Name
+              <input
+                type="text"
+                name="lastname"
+                required
+              />
+            </label>
+          </p>
+
+          <p>
+            <label>Email
+              <input
+                type="email"
+                name="email"
+                required
+              />
+            </label>
+          </p>
+
+          <p>
+            <label>Will you be attending?
+              <select
+                name="attending"
+                required
+                onchange="toggleGuestSection(this.value)"
+              >
+                <option value="">Please select</option>
+                <option value="yes">Joyfully Accept</option>
+                <option value="no">Regretfully Decline</option>
+              </select>
+            </label>
+          </p>
+
+          <!-- Guest details section, hidden by default -->
+          <div id="guestSection" style="display: none;">
             <p>
-              <label>First Name
-                <input
-                  type="text"
-                  name="firstname"
-                  required
-                />
-              </label>
-            </p>
-
-            <p>
-              <label>Last Name
-                <input
-                  type="text"
-                  name="lastname"
-                  required
-                />
-              </label>
-            </p>
-
-            <p>
-              <label>Email
-                <input
-                  type="email"
-                  name="email"
-                  required
-                />
-              </label>
-            </p>
-
-            <p>
-              <label>Will you be attending?
+              <label>Are you bringing adult guests?
                 <select
-                  name="attending"
-                  required
-                  onchange="toggleGuestSection(this.value)"
+                  name="bringing_guests"
+                  onchange="toggleGuestCount(this.value)"
                 >
-                  <option value="">Please select</option>
-                  <option value="yes">Joyfully Accept</option>
-                  <option value="no">Regretfully Decline</option>
+                  <option value="no">No additional guests</option>
+                  <option value="yes">Yes, I will bring guests</option>
                 </select>
               </label>
             </p>
 
-            <!-- Guest details section, hidden by default -->
-            <div id="guestSection" style="display: none;">
-              <p>
-                <label>Are you bringing adult guests?
-                  <select
-                    name="bringing_guests"
-                    onchange="toggleGuestCount(this.value)"
-                  >
-                    <option value="no">No additional guests</option>
-                    <option value="yes">Yes, I will bring guests</option>
-                  </select>
-                </label>
-              </p>
+            <p id="guestCountSection" style="display: none;">
+              <label>Number of adult guests
+                <select name="guest_count">
+                  <option value="0">Select number of guests</option>
+                  <option value="1">1 guest</option>
+                  <option value="2">2 guests</option>
+                  <option value="3">3 guests</option>
+                  <option value="4">4 guests</option>
+                </select>
+              </label>
+            </p>
 
-              <p id="guestCountSection" style="display: none;">
-                <label>Number of adult guests
-                  <select name="guest_count">
-                    <option value="0">Select number of guests</option>
-                    <option value="1">1 guest</option>
-                    <option value="2">2 guests</option>
-                    <option value="3">3 guests</option>
-                    <option value="4">4 guests</option>
-                  </select>
-                </label>
-              </p>
+            <p>
+              <label
+                >Are you bringing children? (The venue features a farm with friendly animals)
+                <select
+                  name="bringing_children"
+                  onchange="toggleChildCount(this.value)"
+                >
+                  <option value="no">No children</option>
+                  <option value="yes">Yes, I will bring children</option>
+                </select>
+              </label>
+            </p>
 
-              <p>
-                <label
-                  >Are you bringing children? (The venue features a farm with friendly animals)
-                  <select
-                    name="bringing_children"
-                    onchange="toggleChildCount(this.value)"
-                  >
-                    <option value="no">No children</option>
-                    <option value="yes">Yes, I will bring children</option>
-                  </select>
-                </label>
-              </p>
+            <p id="childCountSection" style="display: none;">
+              <label>Number of children
+                <select name="child_count">
+                  <option value="0">Select number of children</option>
+                  <option value="1">1 child</option>
+                  <option value="2">2 children</option>
+                  <option value="3">3 children</option>
+                  <option value="4">4 children</option>
+                </select>
+              </label>
+            </p>
+          </div>
 
-              <p id="childCountSection" style="display: none;">
-                <label>Number of children
-                  <select name="child_count">
-                    <option value="0">Select number of children</option>
-                    <option value="1">1 child</option>
-                    <option value="2">2 children</option>
-                    <option value="3">3 children</option>
-                    <option value="4">4 children</option>
-                  </select>
-                </label>
-              </p>
-            </div>
-
-            <!-- Navigation buttons -->
-            <div class="navigation">
-              <button type="button" onclick="previousSlide()">Back</button>
-              <button type="submit">Send RSVP</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Success Overlay -->
-    <div class="success-overlay" id="successOverlay">
-      <div class="success-content">
-        <h2>Thank You!</h2>
-        <p>
-          We've received your RSVP and can't wait to
-          celebrate with you!
-        </p>
-        <button
-          class="success-button"
-          onclick="window.location.href='/'"
-        >
-          Back to Invitation
-        </button>
+          <!-- Navigation buttons -->
+          <div class="navigation">
+            <button type="button" onclick="previousSlide()">Back</button>
+            <button type="submit">Send RSVP</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 
-  <script>
-    // Wait until entire page (including images) finishes loading:
-    window.addEventListener("load", function () {
-      // Hide the loading message
-      document.getElementById("loading-message").style.display = "none";
-      // Show the main container
-      document.getElementById("app-container").style.display = "flex";
-    });
+  <!-- Success Overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-content">
+      <h2>Thank You!</h2>
+      <p>
+        We've received your RSVP and can't wait to
+        celebrate with you!
+      </p>
+      <button
+        class="success-button"
+        onclick="window.location.href='/'"
+      >
+        Back to Invitation
+      </button>
+    </div>
+  </div>
 
+  <script>
     function nextSlide() {
       document
         .getElementById("invitation")

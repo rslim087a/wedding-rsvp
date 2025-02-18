@@ -30,57 +30,30 @@
       width: 100%;
       background-color: var(--light-beige);
       font-family: "Cormorant Garamond", serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       min-height: 100vh;
     }
 
-    body {
-      /* Extra padding so content isn't squashed at edges */
+    /* 
+      2) We'll show a loading message by default, 
+         hide the main content container initially 
+    */
+    #loading-message {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-top: 3rem;
+      color: var(--navy-blue);
+    }
+
+    #app-container {
+      display: none; /* hidden until images have loaded */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 2rem 1rem;
     }
 
-    /* Loading overlay */
-    #loadingOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--light-beige);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      transition: opacity 0.5s ease;
-    }
-
-    .spinner {
-      width: 60px;
-      height: 60px;
-      margin-bottom: 20px;
-      border: 5px solid rgba(27, 54, 92, 0.2);
-      border-top: 5px solid var(--navy-blue);
-      border-radius: 50%;
-      animation: spin 1.5s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .loading-message {
-      font-size: 1.5rem;
-      color: var(--navy-blue);
-      text-align: center;
-      margin: 1rem 0;
-    }
-
     .container {
-      display: none; /* Hide container until images are loaded */
       max-width: 800px;
       width: 100%;
       margin: 0 auto;
@@ -176,7 +149,7 @@
       font-size: 1.2rem;
     }
 
-    /* 2) Ensure form elements don't overflow their container */
+    /* 3) Ensure form elements don't overflow their container */
     input[type="text"],
     input[type="email"],
     select {
@@ -297,288 +270,183 @@
         margin: 0.5rem 0;
       }
     }
-
-    /* Preloaded image container (hidden) */
-    #imagePreloader {
-      position: absolute;
-      width: 0;
-      height: 0;
-      overflow: hidden;
-      visibility: hidden;
-    }
   </style>
 </head>
 <body>
-  <!-- Loading overlay -->
-  <div id="loadingOverlay">
-    <div class="spinner"></div>
-    <div class="loading-message">Loading invitation...</div>
-    <div id="loadingStatus" class="loading-message" style="font-size: 1rem; opacity: 0.8;"></div>
+  <!-- 4) Show a loading message while images are loading -->
+  <div id="loading-message">
+    Loading… Please wait.
   </div>
 
-  <!-- Hidden image preloader -->
-  <div id="imagePreloader"></div>
+  <!-- 5) Main app container hidden until onload -->
+  <div id="app-container">
+    <div class="container">
+      <!-- Slide 1: Invitation -->
+      <div class="slide active" id="invitation">
+        <img
+          src="wedding-2.png"
+          alt="Wedding Invitation"
+          class="main-image"
+        />
+        <div class="content text-center">
+          <p class="time-info">4:00 PM - 11:00 PM</p>
+          <button class="rsvp-button" onclick="nextSlide()">
+            RSVP Now
+          </button>
+          <p class="rsvp-deadline">Please RSVP by May 16th</p>
+        </div>
+      </div>
 
-  <div class="container" id="mainContainer">
-    <!-- Slide 1: Invitation -->
-    <div class="slide active" id="invitation">
-      <img
-        src="wedding-2.png"
-        alt="Wedding Invitation"
-        class="main-image"
-      />
-      <div class="content text-center">
-        <p class="time-info">4:00 PM - 11:00 PM</p>
-        <button class="rsvp-button" onclick="nextSlide()">
-          RSVP Now
-        </button>
-        <p class="rsvp-deadline">Please RSVP by May 16th</p>
+      <!-- Slide 2: RSVP Form -->
+      <div class="slide" id="rsvp-form">
+        <img
+          src="wedding-1.png"
+          alt="Priscilla & Rayan"
+          class="main-image"
+        />
+        <div class="content">
+          <form
+            name="wedding-rsvp"
+            method="POST"
+            data-netlify="true"
+          >
+            <input
+              type="hidden"
+              name="form-name"
+              value="wedding-rsvp"
+            />
+
+            <p>
+              <label>First Name
+                <input
+                  type="text"
+                  name="firstname"
+                  required
+                />
+              </label>
+            </p>
+
+            <p>
+              <label>Last Name
+                <input
+                  type="text"
+                  name="lastname"
+                  required
+                />
+              </label>
+            </p>
+
+            <p>
+              <label>Email
+                <input
+                  type="email"
+                  name="email"
+                  required
+                />
+              </label>
+            </p>
+
+            <p>
+              <label>Will you be attending?
+                <select
+                  name="attending"
+                  required
+                  onchange="toggleGuestSection(this.value)"
+                >
+                  <option value="">Please select</option>
+                  <option value="yes">Joyfully Accept</option>
+                  <option value="no">Regretfully Decline</option>
+                </select>
+              </label>
+            </p>
+
+            <!-- Guest details section, hidden by default -->
+            <div id="guestSection" style="display: none;">
+              <p>
+                <label>Are you bringing adult guests?
+                  <select
+                    name="bringing_guests"
+                    onchange="toggleGuestCount(this.value)"
+                  >
+                    <option value="no">No additional guests</option>
+                    <option value="yes">Yes, I will bring guests</option>
+                  </select>
+                </label>
+              </p>
+
+              <p id="guestCountSection" style="display: none;">
+                <label>Number of adult guests
+                  <select name="guest_count">
+                    <option value="0">Select number of guests</option>
+                    <option value="1">1 guest</option>
+                    <option value="2">2 guests</option>
+                    <option value="3">3 guests</option>
+                    <option value="4">4 guests</option>
+                  </select>
+                </label>
+              </p>
+
+              <p>
+                <label
+                  >Are you bringing children? (The venue features a farm with friendly animals)
+                  <select
+                    name="bringing_children"
+                    onchange="toggleChildCount(this.value)"
+                  >
+                    <option value="no">No children</option>
+                    <option value="yes">Yes, I will bring children</option>
+                  </select>
+                </label>
+              </p>
+
+              <p id="childCountSection" style="display: none;">
+                <label>Number of children
+                  <select name="child_count">
+                    <option value="0">Select number of children</option>
+                    <option value="1">1 child</option>
+                    <option value="2">2 children</option>
+                    <option value="3">3 children</option>
+                    <option value="4">4 children</option>
+                  </select>
+                </label>
+              </p>
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="navigation">
+              <button type="button" onclick="previousSlide()">Back</button>
+              <button type="submit">Send RSVP</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
-    <!-- Slide 2: RSVP Form -->
-    <div class="slide" id="rsvp-form">
-      <img
-        src="wedding-1.png"
-        alt="Priscilla & Rayan"
-        class="main-image"
-      />
-      <div class="content">
-        <form
-          name="wedding-rsvp"
-          method="POST"
-          data-netlify="true"
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+      <div class="success-content">
+        <h2>Thank You!</h2>
+        <p>
+          We've received your RSVP and can't wait to
+          celebrate with you!
+        </p>
+        <button
+          class="success-button"
+          onclick="window.location.href='/'"
         >
-          <input
-            type="hidden"
-            name="form-name"
-            value="wedding-rsvp"
-          />
-
-          <p>
-            <label>First Name
-              <input
-                type="text"
-                name="firstname"
-                required
-              />
-            </label>
-          </p>
-
-          <p>
-            <label>Last Name
-              <input
-                type="text"
-                name="lastname"
-                required
-              />
-            </label>
-          </p>
-
-          <p>
-            <label>Email
-              <input
-                type="email"
-                name="email"
-                required
-              />
-            </label>
-          </p>
-
-          <p>
-            <label>Will you be attending?
-              <select
-                name="attending"
-                required
-                onchange="toggleGuestSection(this.value)"
-              >
-                <option value="">Please select</option>
-                <option value="yes">Joyfully Accept</option>
-                <option value="no">Regretfully Decline</option>
-              </select>
-            </label>
-          </p>
-
-          <!-- Guest details section, hidden by default -->
-          <div id="guestSection" style="display: none;">
-            <p>
-              <label>Are you bringing adult guests?
-                <select
-                  name="bringing_guests"
-                  onchange="toggleGuestCount(this.value)"
-                >
-                  <option value="no">No additional guests</option>
-                  <option value="yes">Yes, I will bring guests</option>
-                </select>
-              </label>
-            </p>
-
-            <p id="guestCountSection" style="display: none;">
-              <label>Number of adult guests
-                <select name="guest_count">
-                  <option value="0">Select number of guests</option>
-                  <option value="1">1 guest</option>
-                  <option value="2">2 guests</option>
-                  <option value="3">3 guests</option>
-                  <option value="4">4 guests</option>
-                </select>
-              </label>
-            </p>
-
-            <p>
-              <label
-                >Are you bringing children? (The venue features a farm with friendly animals)
-                <select
-                  name="bringing_children"
-                  onchange="toggleChildCount(this.value)"
-                >
-                  <option value="no">No children</option>
-                  <option value="yes">Yes, I will bring children</option>
-                </select>
-              </label>
-            </p>
-
-            <p id="childCountSection" style="display: none;">
-              <label>Number of children
-                <select name="child_count">
-                  <option value="0">Select number of children</option>
-                  <option value="1">1 child</option>
-                  <option value="2">2 children</option>
-                  <option value="3">3 children</option>
-                  <option value="4">4 children</option>
-                </select>
-              </label>
-            </p>
-          </div>
-
-          <!-- Navigation buttons -->
-          <div class="navigation">
-            <button type="button" onclick="previousSlide()">Back</button>
-            <button type="submit">Send RSVP</button>
-          </div>
-        </form>
+          Back to Invitation
+        </button>
       </div>
-    </div>
-  </div>
-
-  <!-- Success Overlay -->
-  <div class="success-overlay" id="successOverlay">
-    <div class="success-content">
-      <h2>Thank You!</h2>
-      <p>
-        We've received your RSVP and can't wait to
-        celebrate with you!
-      </p>
-      <button
-        class="success-button"
-        onclick="window.location.href='/'"
-      >
-        Back to Invitation
-      </button>
     </div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Images to preload with their URLs
-      const imagesToLoad = [
-        { id: "wedding1", src: "wedding-1.png" },
-        { id: "wedding2", src: "wedding-2.png" }
-      ];
-      
-      let imagesLoaded = 0;
-      const totalImages = imagesToLoad.length;
-      const statusElement = document.getElementById("loadingStatus");
-      
-      function updateStatus(message) {
-        if (statusElement) {
-          statusElement.textContent = message;
-        }
-      }
-      
-      function preloadImages() {
-        // Create preloader container if it doesn't exist
-        const preloader = document.getElementById('imagePreloader');
-        
-        updateStatus(`Preparing to load ${totalImages} images...`);
-        
-        // Actively preload each image with retry mechanism
-        imagesToLoad.forEach((imageData, index) => {
-          const attemptLoad = (retryCount = 0) => {
-            // Maximum retry attempts
-            const MAX_RETRIES = 3;
-            
-            // Create new image element
-            const img = new Image();
-            
-            // Set unique ID for tracking
-            img.id = imageData.id;
-            
-            // Success handler
-            img.onload = function() {
-              imagesLoaded++;
-              updateStatus(`Loaded image ${imagesLoaded} of ${totalImages}`);
-              
-              // Add to preloader to keep in DOM
-              preloader.appendChild(img);
-              
-              if (imagesLoaded === totalImages) {
-                // All images loaded successfully
-                showMainContent();
-              }
-            };
-            
-            // Error handler with retry
-            img.onerror = function() {
-              if (retryCount < MAX_RETRIES) {
-                updateStatus(`Retrying image ${index + 1}... (Attempt ${retryCount + 1})`);
-                // Retry with exponential backoff
-                setTimeout(() => attemptLoad(retryCount + 1), 1000 * Math.pow(2, retryCount));
-              } else {
-                console.error(`Failed to load image: ${imageData.src} after ${MAX_RETRIES} attempts`);
-                // Count as loaded to prevent infinite loading state
-                imagesLoaded++;
-                updateStatus(`Could not load image ${index + 1}. Continuing...`);
-                
-                if (imagesLoaded === totalImages) {
-                  showMainContent();
-                }
-              }
-            };
-            
-            // Add timestamp to URL to prevent caching issues
-            const timestamp = new Date().getTime();
-            img.src = `${imageData.src}?t=${timestamp}`;
-            
-            // Force browser to start loading immediately
-            img.fetchPriority = "high";
-          };
-          
-          // Start loading attempt
-          attemptLoad();
-        });
-      }
-      
-      function showMainContent() {
-        updateStatus("Preparing your invitation...");
-        
-        // Short delay to ensure images are properly rendered
-        setTimeout(() => {
-          // Show main container
-          document.getElementById('mainContainer').style.display = 'block';
-          
-          // Fade out and remove loading overlay
-          const loadingOverlay = document.getElementById('loadingOverlay');
-          loadingOverlay.style.opacity = '0';
-          
-          setTimeout(() => {
-            loadingOverlay.style.display = 'none';
-          }, 500);
-        }, 800);
-      }
-      
-      // Start the preloading process
-      preloadImages();
+    // Wait until entire page (including images) finishes loading:
+    window.addEventListener("load", function () {
+      // Hide the loading message
+      document.getElementById("loading-message").style.display = "none";
+      // Show the main container
+      document.getElementById("app-container").style.display = "flex";
     });
 
     function nextSlide() {

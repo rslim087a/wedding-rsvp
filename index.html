@@ -41,7 +41,45 @@
       padding: 2rem 1rem;
     }
 
+    /* Loading overlay */
+    #loadingOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--light-beige);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 20px;
+      border: 5px solid rgba(27, 54, 92, 0.2);
+      border-top: 5px solid var(--navy-blue);
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-message {
+      font-size: 1.5rem;
+      color: var(--navy-blue);
+      text-align: center;
+      margin: 1rem 0;
+    }
+
     .container {
+      display: none; /* Hidden until images are loaded */
       max-width: 800px;
       width: 100%;
       margin: 0 auto;
@@ -49,7 +87,6 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       border: 1px solid var(--gold);
-      /* Removed overflow: hidden to avoid input cut‐offs. */
     }
 
     .main-image {
@@ -262,13 +299,20 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- Loading overlay -->
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-message">Loading invitation...</div>
+  </div>
+  
+  <div class="container" id="mainContainer">
     <!-- Slide 1: Invitation -->
     <div class="slide active" id="invitation">
       <img
-        src="wedding-2.png"
+        src="https://github.com/rslim087a/wedding-rsvp/blob/main/wedding-2.png?raw=true"
         alt="Wedding Invitation"
         class="main-image"
+        id="mainImage1"
       />
       <div class="content text-center">
         <p class="time-info">4:00 PM - 11:00 PM</p>
@@ -282,9 +326,10 @@
     <!-- Slide 2: RSVP Form -->
     <div class="slide" id="rsvp-form">
       <img
-        src="wedding-1.png"
+        src="https://github.com/rslim087a/wedding-rsvp/blob/main/wedding-1.png?raw=true"
         alt="Priscilla & Rayan"
         class="main-image"
+        id="mainImage2"
       />
       <div class="content">
         <form
@@ -422,6 +467,65 @@
   </div>
 
   <script>
+    // Image loading with direct GitHub URLs
+    document.addEventListener("DOMContentLoaded", function() {
+      // Direct reference to both images
+      const image1 = document.getElementById('mainImage1');
+      const image2 = document.getElementById('mainImage2');
+      
+      // Track loaded state
+      let image1Loaded = false;
+      let image2Loaded = false;
+      
+      // Check if images are already loaded (from cache)
+      if (image1.complete) image1Loaded = true;
+      if (image2.complete) image2Loaded = true;
+      
+      // If both images are already loaded (from cache), show content immediately
+      if (image1Loaded && image2Loaded) {
+        showContent();
+        return;
+      }
+      
+      // Handle image 1 loading
+      image1.onload = function() {
+        image1Loaded = true;
+        checkAllImagesLoaded();
+      };
+      
+      // Handle image 2 loading
+      image2.onload = function() {
+        image2Loaded = true;
+        checkAllImagesLoaded();
+      };
+      
+      // Error handlers - consider images as "loaded" even if they fail
+      image1.onerror = function() {
+        console.error("Failed to load image 1");
+        image1Loaded = true;
+        checkAllImagesLoaded();
+      };
+      
+      image2.onerror = function() {
+        console.error("Failed to load image 2");
+        image2Loaded = true;
+        checkAllImagesLoaded();
+      };
+      
+      // Check if all images are loaded
+      function checkAllImagesLoaded() {
+        if (image1Loaded && image2Loaded) {
+          showContent();
+        }
+      }
+    });
+    
+    // Show main content
+    function showContent() {
+      document.getElementById('loadingOverlay').style.display = 'none';
+      document.getElementById('mainContainer').style.display = 'block';
+    }
+
     function nextSlide() {
       document
         .getElementById("invitation")

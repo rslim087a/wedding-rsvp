@@ -41,41 +41,6 @@
       padding: 2rem 1rem;
     }
 
-    /* Loading overlay styles */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--light-beige);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      transition: opacity 0.5s ease;
-    }
-
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid var(--gold);
-      border-top: 4px solid var(--navy-blue);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    .loading-text {
-      margin-top: 20px;
-      color: var(--navy-blue);
-      font-size: 1.4rem;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
     .container {
       max-width: 800px;
       width: 100%;
@@ -84,8 +49,7 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       border: 1px solid var(--gold);
-      /* Initially hidden until images load */
-      display: none;
+      /* Removed overflow: hidden to avoid input cut‐offs. */
     }
 
     .main-image {
@@ -298,15 +262,7 @@
   </style>
 </head>
 <body>
-  <!-- Loading overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-content">
-      <div class="loading-spinner"></div>
-      <div class="loading-text">Loading invitation...</div>
-    </div>
-  </div>
-
-  <div class="container" id="mainContainer">
+  <div class="container">
     <!-- Slide 1: Invitation -->
     <div class="slide active" id="invitation">
       <img
@@ -466,58 +422,6 @@
   </div>
 
   <script>
-    // Image preloading functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const imagesToPreload = [
-        'wedding-1.png',
-        'wedding-2.png'
-      ];
-      let imagesLoaded = 0;
-      const totalImages = imagesToPreload.length;
-      
-      function preloadImages() {
-        imagesToPreload.forEach(src => {
-          const img = new Image();
-          img.src = src;
-          
-          img.onload = function() {
-            imagesLoaded++;
-            if (imagesLoaded === totalImages) {
-              // All images loaded, show the app
-              showApp();
-            }
-          };
-          
-          img.onerror = function() {
-            // Count failed loads as "loaded" to prevent app from never showing
-            console.error(`Failed to load image: ${src}`);
-            imagesLoaded++;
-            if (imagesLoaded === totalImages) {
-              showApp();
-            }
-          };
-        });
-      }
-      
-      function showApp() {
-        // Fade out loading overlay
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        loadingOverlay.style.opacity = '0';
-        
-        // Show main container
-        const mainContainer = document.getElementById('mainContainer');
-        mainContainer.style.display = 'block';
-        
-        // Completely remove loading overlay after transition
-        setTimeout(() => {
-          loadingOverlay.style.display = 'none';
-        }, 500);
-      }
-      
-      // Start preloading
-      preloadImages();
-    });
-
     function nextSlide() {
       document
         .getElementById("invitation")

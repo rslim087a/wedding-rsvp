@@ -52,6 +52,21 @@
       /* Removed overflow: hidden to avoid input cut‐offs. */
     }
 
+    .main-image-fallback {
+      width: 100%;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--light-beige);
+      color: var(--navy-blue);
+      font-size: 1.5rem;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      text-align: center;
+      padding: 2rem;
+    }
+
     .main-image {
       width: 100%;
       height: auto;
@@ -265,11 +280,22 @@
   <div class="container">
     <!-- Slide 1: Invitation -->
     <div class="slide active" id="invitation">
-      <img
-        src="wedding-2.png"
-        alt="Wedding Invitation"
-        class="main-image"
-      />
+      <picture>
+        <source srcset="./wedding-2.png" type="image/png">
+        <source srcset="/wedding-2.png" type="image/png">
+        <img
+          src="wedding-2.png"
+          alt="Wedding Invitation"
+          class="main-image"
+          onerror="this.style.display='none'; document.getElementById('img1-fallback').style.display='flex';"
+        />
+      </picture>
+      <div id="img1-fallback" class="main-image-fallback" style="display:none;">
+        <div>
+          <h2 style="margin:0; font-size:2.5rem; color: var(--navy-blue);">Priscilla & Rayan</h2>
+          <p style="margin:1rem 0;">We are excited to invite you to our wedding celebration!</p>
+        </div>
+      </div>
       <div class="content text-center">
         <p class="time-info">4:00 PM - 11:00 PM</p>
         <button class="rsvp-button" onclick="nextSlide()">
@@ -281,11 +307,22 @@
 
     <!-- Slide 2: RSVP Form -->
     <div class="slide" id="rsvp-form">
-      <img
-        src="wedding-1.png"
-        alt="Priscilla & Rayan"
-        class="main-image"
-      />
+      <picture>
+        <source srcset="./wedding-1.png" type="image/png">
+        <source srcset="/wedding-1.png" type="image/png">
+        <img
+          src="wedding-1.png"
+          alt="Priscilla & Rayan"
+          class="main-image"
+          onerror="this.style.display='none'; document.getElementById('img2-fallback').style.display='flex';"
+        />
+      </picture>
+      <div id="img2-fallback" class="main-image-fallback" style="display:none;">
+        <div>
+          <h2 style="margin:0; font-size:2.5rem; color: var(--navy-blue);">Priscilla & Rayan</h2>
+          <p style="margin:1rem 0;">Wedding RSVP</p>
+        </div>
+      </div>
       <div class="content">
         <form
           name="wedding-rsvp"
@@ -422,6 +459,49 @@
   </div>
 
   <script>
+    // Immediately attempt to load images when page loads
+    window.addEventListener('DOMContentLoaded', function() {
+      // Force image loading with different path patterns
+      tryLoadImages();
+    });
+
+    function tryLoadImages() {
+      // Try multiple possible paths
+      const possiblePaths = [
+        '',           // current directory
+        './',         // explicit current directory
+        '/',          // root directory
+        '../',        // parent directory
+        '../../',     // grandparent directory
+        '/assets/',   // common assets directory
+        './assets/',  // relative assets directory
+        '/images/',   // common images directory
+        './images/'   // relative images directory
+      ];
+      
+      // For both images
+      ['wedding-1.png', 'wedding-2.png'].forEach((imgName, index) => {
+        loadImageWithFallbacks(imgName, possiblePaths, index + 1);
+      });
+    }
+
+    function loadImageWithFallbacks(imageName, paths, imageIndex) {
+      // Try each possible path
+      paths.forEach(path => {
+        const img = new Image();
+        img.onload = function() {
+          // If this path works, update all instances of this image
+          document.querySelectorAll(`img[src="${imageName}"]`).forEach(imgElement => {
+            imgElement.src = path + imageName;
+          });
+          // Hide fallback if image loads
+          const fallback = document.getElementById(`img${imageIndex}-fallback`);
+          if (fallback) fallback.style.display = 'none';
+        };
+        img.src = path + imageName;
+      });
+    }
+
     function nextSlide() {
       document
         .getElementById("invitation")

@@ -1,404 +1,495 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Priscilla & Rayan's Wedding RSVP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy-blue: #1B365C;
-            --sage-green: #7C8D78;
-            --light-beige: #FAF7F2;
-            --gold: #D4B78F;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Priscilla & Rayan's Wedding RSVP</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* 1) Ensure everything respects container boundaries */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-        body {
-            margin: 0;
-            font-family: 'Cormorant Garamond', serif;
-            background-color: var(--light-beige);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 1rem;
-        }
+    :root {
+      --navy-blue: #1B365C;
+      --sage-green: #7C8D78;
+      --light-beige: #FAF7F2;
+      --gold: #D4B78F;
+    }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--gold);
-        }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background-color: var(--light-beige);
+      font-family: "Cormorant Garamond", serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        .main-image {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+    body {
+      /* Extra padding so content isn't squashed at edges */
+      padding: 2rem 1rem;
+    }
 
-        .content {
-            padding: 2rem;
-        }
+    .container {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--gold);
+      /* Removed overflow: hidden to avoid input cut‐offs. */
+    }
 
-        .slide {
-            display: none;
-        }
+    .main-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
 
-        .slide.active {
-            display: block;
-        }
+    .content {
+      padding: 2rem;
+    }
 
-        .content.text-center {
-            padding: 0;
-            background: white;
-        }
+    .slide {
+      display: none;
+    }
 
-        .time-info {
-            color: var(--navy-blue);
-            font-size: 1.4rem;
-            margin: 0;
-            padding: 1.5rem;
-            font-weight: 500;
-            text-align: center;
-        }
+    .slide.active {
+      display: block;
+    }
 
-        .venue-info {
-            background-color: rgba(27, 54, 92, 0.05);
-            padding: 1.2rem;
-            margin: 0.5rem 0;
-            border-radius: 8px;
-        }
+    .content.text-center {
+      padding: 0;
+      background: white;
+      text-align: center;
+    }
 
-        .venue-info p {
-            margin: 0;
-            color: var(--navy-blue);
-            font-size: 1.2rem;
-            text-align: center;
-        }
+    .time-info {
+      color: var(--navy-blue);
+      font-size: 1.4rem;
+      margin: 0;
+      padding: 1.5rem;
+      font-weight: 500;
+    }
 
-        .rsvp-button {
-            width: 100%;
-            margin: 0;
-            padding: 1.5rem;
-            background-color: var(--navy-blue);
-            color: white;
-            border: none;
-            font-size: 1.4rem;
-            cursor: pointer;
-            font-family: 'Cormorant Garamond', serif;
-            transition: background-color 0.3s ease;
-        }
+    .venue-info {
+      background-color: rgba(27, 54, 92, 0.05);
+      padding: 1.2rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+    }
 
-        .rsvp-button:hover {
-            background-color: #2B466C;
-        }
+    .venue-info p {
+      margin: 0;
+      color: var(--navy-blue);
+      font-size: 1.2rem;
+      text-align: center;
+    }
 
-        .rsvp-deadline {
-            color: var(--navy-blue);
-            font-size: 1.2rem;
-            margin: 0;
-            padding: 1rem;
-            text-align: center;
-        }
+    .rsvp-button {
+      width: 100%;
+      margin: 0;
+      padding: 1.5rem;
+      background-color: var(--navy-blue);
+      color: white;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      font-family: "Cormorant Garamond", serif;
+      transition: background-color 0.3s ease;
+    }
 
-        p {
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #333;
-        }
+    .rsvp-button:hover {
+      background-color: #2B466C;
+    }
 
-        label {
-            display: block;
-            color: var(--navy-blue);
-            margin-bottom: 0.5rem;
-            font-size: 1.2rem;
-        }
+    .rsvp-deadline {
+      color: var(--navy-blue);
+      font-size: 1.2rem;
+      margin: 0;
+      padding: 1rem;
+    }
 
-        input[type="text"],
-        input[type="email"],
-        select {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid var(--gold);
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-family: 'Cormorant Garamond', serif;
-            background-color: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
-        }
+    p {
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #333;
+    }
 
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--navy-blue);
-            box-shadow: 0 0 5px rgba(27, 54, 92, 0.2);
-        }
+    label {
+      display: block;
+      color: var(--navy-blue);
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
 
-        .navigation {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
+    /* 2) Ensure form elements don't overflow their container */
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      max-width: 100%;
+      padding: 1rem;
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-family: "Cormorant Garamond", serif;
+      background-color: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease;
+    }
 
-        .navigation button {
-            background-color: var(--navy-blue);
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Cormorant Garamond', serif;
-        }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--navy-blue);
+      box-shadow: 0 0 5px rgba(27, 54, 92, 0.2);
+    }
 
-        .navigation button:hover {
-            background-color: #2B466C;
-            transform: translateY(-2px);
-        }
+    .navigation {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
 
-        .success-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--navy-blue);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
+    .navigation button {
+      background-color: var(--navy-blue);
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: "Cormorant Garamond", serif;
+    }
 
-        .success-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
+    .navigation button:hover {
+      background-color: #2B466C;
+      transform: translateY(-2px);
+    }
 
-        .success-content {
-            text-align: center;
-            color: white;
-            padding: 2rem;
-            max-width: 600px;
-        }
+    .success-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--navy-blue);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
 
-        .success-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--gold);
-        }
+    .success-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
 
-        .success-content p {
-            color: white;
-            font-size: 1.4rem;
-            margin-bottom: 2rem;
-        }
+    .success-content {
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      max-width: 600px;
+    }
 
-        .success-button {
-            background-color: var(--gold);
-            color: var(--navy-blue);
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Cormorant Garamond', serif;
-        }
+    .success-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--gold);
+    }
 
-        .success-button:hover {
-            background-color: #E5C9A0;
-            transform: translateY(-2px);
-        }
+    .success-content p {
+      color: white;
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+    }
 
-        @media (max-width: 600px) {
-            .container {
-                border-radius: 10px;
-            }
-            
-            .content {
-                padding: 1.5rem;
-            }
-            
-            .navigation {
-                flex-direction: column;
-            }
-            
-            .navigation button {
-                width: 100%;
-                margin: 0.5rem 0;
-            }
-        }
-    </style>
+    .success-button {
+      background-color: var(--gold);
+      color: var(--navy-blue);
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: "Cormorant Garamond", serif;
+    }
+
+    .success-button:hover {
+      background-color: #E5C9A0;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        border-radius: 10px;
+      }
+
+      .content {
+        padding: 1.5rem;
+      }
+
+      .navigation {
+        flex-direction: column;
+      }
+
+      .navigation button {
+        width: 100%;
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="slide active" id="invitation">
-            <img src="wedding-2.png" alt="Wedding Invitation" class="main-image">
-            <div class="content text-center">
-                <p class="time-info">4:00 PM - 11:00 PM</p>
-                <button class="rsvp-button" onclick="nextSlide()">RSVP Now</button>
-                <p class="rsvp-deadline">Please RSVP by May 16th</p>
-            </div>
-        </div>
-
-        <div class="slide" id="rsvp-form">
-            <img src="wedding-1.png" alt="Priscilla & Rayan" class="main-image">
-            <div class="content">
-                <form name="wedding-rsvp" method="POST" data-netlify="true">
-                    <input type="hidden" name="form-name" value="wedding-rsvp" />
-                    <p>
-                        <label>First Name <input type="text" name="firstname" required /></label>
-                    </p>
-                    <p>
-                        <label>Last Name <input type="text" name="lastname" required /></label>
-                    </p>
-                    <p>
-                        <label>Email <input type="email" name="email" required /></label>
-                    </p>
-                    <p>
-                        <label>Will you be attending?
-                            <select name="attending" required onchange="toggleGuestSection(this.value)">
-                                <option value="">Please select</option>
-                                <option value="yes">Joyfully Accept</option>
-                                <option value="no">Regretfully Decline</option>
-                            </select>
-                        </label>
-                    </p>
-                    <div id="guestSection" style="display: none;">
-                        <p>
-                            <label>Are you bringing adult guests?
-                                <select name="bringing_guests" onchange="toggleGuestCount(this.value)">
-                                    <option value="no">No additional guests</option>
-                                    <option value="yes">Yes, I will bring guests</option>
-                                </select>
-                            </label>
-                        </p>
-                        <p id="guestCountSection" style="display: none;">
-                            <label>Number of adult guests
-                                <select name="guest_count">
-                                    <option value="0">Select number of guests</option>
-                                    <option value="1">1 guest</option>
-                                    <option value="2">2 guests</option>
-                                    <option value="3">3 guests</option>
-                                    <option value="4">4 guests</option>
-                                </select>
-                            </label>
-                        </p>
-                        <p>
-                            <label>Are you bringing children? (The venue features a beautiful farm with friendly animals)
-                                <select name="bringing_children" onchange="toggleChildCount(this.value)">
-                                    <option value="no">No children</option>
-                                    <option value="yes">Yes, I will bring children</option>
-                                </select>
-                            </label>
-                        </p>
-                        <p id="childCountSection" style="display: none;">
-                            <label>Number of children
-                                <select name="child_count">
-                                    <option value="0">Select number of children</option>
-                                    <option value="1">1 child</option>
-                                    <option value="2">2 children</option>
-                                    <option value="3">3 children</option>
-                                    <option value="4">4 children</option>
-                                </select>
-                            </label>
-                        </p>
-                    </div>
-                    <div class="navigation">
-                        <button type="button" onclick="previousSlide()">Back</button>
-                        <button type="submit">Send RSVP</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+  <div class="container">
+    <!-- Slide 1: Invitation -->
+    <div class="slide active" id="invitation">
+      <img
+        src="wedding-2.png"
+        alt="Wedding Invitation"
+        class="main-image"
+      />
+      <div class="content text-center">
+        <p class="time-info">4:00 PM - 11:00 PM</p>
+        <button class="rsvp-button" onclick="nextSlide()">
+          RSVP Now
+        </button>
+        <p class="rsvp-deadline">Please RSVP by May 16th</p>
+      </div>
     </div>
 
-    <!-- Success Overlay -->
-    <div class="success-overlay" id="successOverlay">
-        <div class="success-content">
-            <h2>Thank You!</h2>
-            <p>We've received your RSVP and can't wait to celebrate with you!</p>
-            <button class="success-button" onclick="window.location.href='/'">Back to Invitation</button>
-        </div>
+    <!-- Slide 2: RSVP Form -->
+    <div class="slide" id="rsvp-form">
+      <img
+        src="wedding-1.png"
+        alt="Priscilla & Rayan"
+        class="main-image"
+      />
+      <div class="content">
+        <form
+          name="wedding-rsvp"
+          method="POST"
+          data-netlify="true"
+        >
+          <input
+            type="hidden"
+            name="form-name"
+            value="wedding-rsvp"
+          />
+
+          <p>
+            <label>First Name
+              <input
+                type="text"
+                name="firstname"
+                required
+              />
+            </label>
+          </p>
+
+          <p>
+            <label>Last Name
+              <input
+                type="text"
+                name="lastname"
+                required
+              />
+            </label>
+          </p>
+
+          <p>
+            <label>Email
+              <input
+                type="email"
+                name="email"
+                required
+              />
+            </label>
+          </p>
+
+          <p>
+            <label>Will you be attending?
+              <select
+                name="attending"
+                required
+                onchange="toggleGuestSection(this.value)"
+              >
+                <option value="">Please select</option>
+                <option value="yes">Joyfully Accept</option>
+                <option value="no">Regretfully Decline</option>
+              </select>
+            </label>
+          </p>
+
+          <!-- Guest details section, hidden by default -->
+          <div id="guestSection" style="display: none;">
+            <p>
+              <label>Are you bringing adult guests?
+                <select
+                  name="bringing_guests"
+                  onchange="toggleGuestCount(this.value)"
+                >
+                  <option value="no">No additional guests</option>
+                  <option value="yes">Yes, I will bring guests</option>
+                </select>
+              </label>
+            </p>
+
+            <p id="guestCountSection" style="display: none;">
+              <label>Number of adult guests
+                <select name="guest_count">
+                  <option value="0">Select number of guests</option>
+                  <option value="1">1 guest</option>
+                  <option value="2">2 guests</option>
+                  <option value="3">3 guests</option>
+                  <option value="4">4 guests</option>
+                </select>
+              </label>
+            </p>
+
+            <p>
+              <label
+                >Are you bringing children? (The venue features a farm with friendly animals)
+                <select
+                  name="bringing_children"
+                  onchange="toggleChildCount(this.value)"
+                >
+                  <option value="no">No children</option>
+                  <option value="yes">Yes, I will bring children</option>
+                </select>
+              </label>
+            </p>
+
+            <p id="childCountSection" style="display: none;">
+              <label>Number of children
+                <select name="child_count">
+                  <option value="0">Select number of children</option>
+                  <option value="1">1 child</option>
+                  <option value="2">2 children</option>
+                  <option value="3">3 children</option>
+                  <option value="4">4 children</option>
+                </select>
+              </label>
+            </p>
+          </div>
+
+          <!-- Navigation buttons -->
+          <div class="navigation">
+            <button type="button" onclick="previousSlide()">Back</button>
+            <button type="submit">Send RSVP</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <script>
-        function nextSlide() {
-            document.getElementById('invitation').classList.remove('active');
-            document.getElementById('rsvp-form').classList.add('active');
-        }
+  <!-- Success Overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-content">
+      <h2>Thank You!</h2>
+      <p>
+        We've received your RSVP and can't wait to
+        celebrate with you!
+      </p>
+      <button
+        class="success-button"
+        onclick="window.location.href='/'"
+      >
+        Back to Invitation
+      </button>
+    </div>
+  </div>
 
-        function previousSlide() {
-            document.getElementById('rsvp-form').classList.remove('active');
-            document.getElementById('invitation').classList.add('active');
-        }
+  <script>
+    function nextSlide() {
+      document
+        .getElementById("invitation")
+        .classList.remove("active");
+      document
+        .getElementById("rsvp-form")
+        .classList.add("active");
+    }
 
-        function toggleGuestSection(value) {
-            const guestSection = document.getElementById('guestSection');
-            guestSection.style.display = value === 'yes' ? 'block' : 'none';
-            if (value !== 'yes') {
-                // Reset all guest-related values when not attending
-                const guestSelect = document.querySelector('[name="bringing_guests"]');
-                const guestCount = document.querySelector('[name="guest_count"]');
-                const childrenSelect = document.querySelector('[name="bringing_children"]');
-                const childCount = document.querySelector('[name="child_count"]');
-                
-                guestSelect.value = 'no';
-                guestCount.value = '';
-                childrenSelect.value = 'no';
-                childCount.value = '';
-                
-                document.getElementById('guestCountSection').style.display = 'none';
-                document.getElementById('childCountSection').style.display = 'none';
-            }
-        }
+    function previousSlide() {
+      document
+        .getElementById("rsvp-form")
+        .classList.remove("active");
+      document
+        .getElementById("invitation")
+        .classList.add("active");
+    }
 
-        function toggleGuestCount(value) {
-            const guestCountSection = document.getElementById('guestCountSection');
-            guestCountSection.style.display = value === 'yes' ? 'block' : 'none';
-            if (value === 'no') {
-                document.querySelector('[name="guest_count"]').value = '';
-            }
-        }
+    function toggleGuestSection(value) {
+      const guestSection = document.getElementById("guestSection");
+      guestSection.style.display = value === "yes" ? "block" : "none";
 
-        function toggleChildCount(value) {
-            const childCountSection = document.getElementById('childCountSection');
-            childCountSection.style.display = value === 'yes' ? 'block' : 'none';
-            if (value === 'no') {
-                document.querySelector('[name="child_count"]').value = '';
-            }
-        }
+      if (value !== "yes") {
+        // Reset guest-related fields if "No"
+        document.querySelector('[name="bringing_guests"]').value = "no";
+        document.querySelector('[name="guest_count"]').value = "";
+        document.querySelector('[name="bringing_children"]').value = "no";
+        document.querySelector('[name="child_count"]').value = "";
+        document.getElementById("guestCountSection").style.display = "none";
+        document.getElementById("childCountSection").style.display = "none";
+      }
+    }
 
-        // Form submission handler
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const form = e.target;
-            fetch('/', {
-                method: 'POST',
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(new FormData(form)).toString()
-            })
-            .then(() => {
-                document.getElementById('successOverlay').classList.add('show');
-            })
-            .catch((error) => {
-                console.error(error);
-                alert('Oops! There was a problem submitting your RSVP. Please try again.');
-            });
+    function toggleGuestCount(value) {
+      const guestCountSection = document.getElementById("guestCountSection");
+      guestCountSection.style.display = value === "yes" ? "block" : "none";
+      if (value === "no") {
+        document.querySelector('[name="guest_count"]').value = "";
+      }
+    }
+
+    function toggleChildCount(value) {
+      const childCountSection = document.getElementById("childCountSection");
+      childCountSection.style.display = value === "yes" ? "block" : "none";
+      if (value === "no") {
+        document.querySelector('[name="child_count"]').value = "";
+      }
+    }
+
+    // Simple Netlify form submission & success overlay
+    document.querySelector("form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const form = e.target;
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(new FormData(form)).toString(),
+      })
+        .then(() => {
+          document.getElementById("successOverlay").classList.add("show");
+        })
+        .catch((error) => {
+          console.error(error);
+          alert(
+            "Oops! There was a problem submitting your RSVP. Please try again."
+          );
         });
-    </script>
+    });
+  </script>
 </body>
 </html>

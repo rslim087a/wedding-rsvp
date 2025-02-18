@@ -41,7 +41,46 @@
       padding: 2rem 1rem;
     }
 
+    /* Loading overlay */
+    #loadingOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--light-beige);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 20px;
+      border: 5px solid rgba(27, 54, 92, 0.2);
+      border-top: 5px solid var(--navy-blue);
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-message {
+      font-size: 1.5rem;
+      color: var(--navy-blue);
+      text-align: center;
+      margin: 1rem 0;
+    }
+
     .container {
+      display: none; /* Hide container until images are loaded */
       max-width: 800px;
       width: 100%;
       margin: 0 auto;
@@ -49,7 +88,6 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       border: 1px solid var(--gold);
-      /* Removed overflow: hidden to avoid input cut‐offs. */
     }
 
     .main-image {
@@ -259,10 +297,29 @@
         margin: 0.5rem 0;
       }
     }
+
+    /* Preloaded image container (hidden) */
+    #imagePreloader {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      visibility: hidden;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- Loading overlay -->
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-message">Loading invitation...</div>
+    <div id="loadingStatus" class="loading-message" style="font-size: 1rem; opacity: 0.8;"></div>
+  </div>
+
+  <!-- Hidden image preloader -->
+  <div id="imagePreloader"></div>
+
+  <div class="container" id="mainContainer">
     <!-- Slide 1: Invitation -->
     <div class="slide active" id="invitation">
       <img
@@ -422,6 +479,108 @@
   </div>
 
   <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Images to preload with their URLs
+      const imagesToLoad = [
+        { id: "wedding1", src: "wedding-1.png" },
+        { id: "wedding2", src: "wedding-2.png" }
+      ];
+      
+      let imagesLoaded = 0;
+      const totalImages = imagesToLoad.length;
+      const statusElement = document.getElementById("loadingStatus");
+      
+      function updateStatus(message) {
+        if (statusElement) {
+          statusElement.textContent = message;
+        }
+      }
+      
+      function preloadImages() {
+        // Create preloader container if it doesn't exist
+        const preloader = document.getElementById('imagePreloader');
+        
+        updateStatus(`Preparing to load ${totalImages} images...`);
+        
+        // Actively preload each image with retry mechanism
+        imagesToLoad.forEach((imageData, index) => {
+          const attemptLoad = (retryCount = 0) => {
+            // Maximum retry attempts
+            const MAX_RETRIES = 3;
+            
+            // Create new image element
+            const img = new Image();
+            
+            // Set unique ID for tracking
+            img.id = imageData.id;
+            
+            // Success handler
+            img.onload = function() {
+              imagesLoaded++;
+              updateStatus(`Loaded image ${imagesLoaded} of ${totalImages}`);
+              
+              // Add to preloader to keep in DOM
+              preloader.appendChild(img);
+              
+              if (imagesLoaded === totalImages) {
+                // All images loaded successfully
+                showMainContent();
+              }
+            };
+            
+            // Error handler with retry
+            img.onerror = function() {
+              if (retryCount < MAX_RETRIES) {
+                updateStatus(`Retrying image ${index + 1}... (Attempt ${retryCount + 1})`);
+                // Retry with exponential backoff
+                setTimeout(() => attemptLoad(retryCount + 1), 1000 * Math.pow(2, retryCount));
+              } else {
+                console.error(`Failed to load image: ${imageData.src} after ${MAX_RETRIES} attempts`);
+                // Count as loaded to prevent infinite loading state
+                imagesLoaded++;
+                updateStatus(`Could not load image ${index + 1}. Continuing...`);
+                
+                if (imagesLoaded === totalImages) {
+                  showMainContent();
+                }
+              }
+            };
+            
+            // Add timestamp to URL to prevent caching issues
+            const timestamp = new Date().getTime();
+            img.src = `${imageData.src}?t=${timestamp}`;
+            
+            // Force browser to start loading immediately
+            img.fetchPriority = "high";
+          };
+          
+          // Start loading attempt
+          attemptLoad();
+        });
+      }
+      
+      function showMainContent() {
+        updateStatus("Preparing your invitation...");
+        
+        // Short delay to ensure images are properly rendered
+        setTimeout(() => {
+          // Show main container
+          document.getElementById('mainContainer').style.display = 'block';
+          
+          // Fade out and remove loading overlay
+          const loadingOverlay = document.getElementById('loadingOverlay');
+          loadingOverlay.style.opacity = '0';
+          
+          setTimeout(() => {
+            loadingOverlay.style.display = 'none';
+          }, 500);
+        }, 800);
+      }
+      
+      // Start the preloading process
+      preloadImages();
+    });
+
     function nextSlide() {
       document
         .getElementById("invitation")

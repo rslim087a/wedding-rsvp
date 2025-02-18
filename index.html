@@ -467,11 +467,18 @@
   </div>
 
   <script>
-    // Image loading with direct GitHub URLs
+    // Image loading with direct GitHub URLs and 5-second fallback
     document.addEventListener("DOMContentLoaded", function() {
       // Direct reference to both images
       const image1 = document.getElementById('mainImage1');
       const image2 = document.getElementById('mainImage2');
+      
+      // Maximum wait time - 5 seconds
+      const MAX_WAIT_TIME = 5000;
+      const timeoutId = setTimeout(function() {
+        console.log("5-second timeout reached, showing content anyway");
+        showContent();
+      }, MAX_WAIT_TIME);
       
       // Track loaded state
       let image1Loaded = false;
@@ -483,6 +490,7 @@
       
       // If both images are already loaded (from cache), show content immediately
       if (image1Loaded && image2Loaded) {
+        clearTimeout(timeoutId);
         showContent();
         return;
       }
@@ -515,6 +523,7 @@
       // Check if all images are loaded
       function checkAllImagesLoaded() {
         if (image1Loaded && image2Loaded) {
+          clearTimeout(timeoutId);
           showContent();
         }
       }

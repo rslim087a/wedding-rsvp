@@ -178,6 +178,7 @@
     /* 2) Ensure form elements don't overflow their container */
     input[type="text"],
     input[type="email"],
+    input[type="number"],
     select {
       width: 100%;
       max-width: 100%;
@@ -192,6 +193,7 @@
 
     input[type="text"]:focus,
     input[type="email"]:focus,
+    input[type="number"]:focus,
     select:focus {
       outline: none;
       border-color: var(--navy-blue);
@@ -276,6 +278,25 @@
     .success-button:hover {
       background-color: #E5C9A0;
       transform: translateY(-2px);
+    }
+
+    .donation-info {
+      background-color: rgba(27, 54, 92, 0.05);
+      padding: 1.2rem;
+      margin: 2rem 0 0.5rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .donation-info p {
+      margin: 0;
+      color: var(--navy-blue);
+      font-size: 1.2rem;
+    }
+
+    .paypal-info {
+      font-weight: 600;
+      color: var(--navy-blue);
     }
 
     @media (max-width: 600px) {
@@ -390,35 +411,42 @@
           <!-- Guest details section, hidden by default -->
           <div id="guestSection" style="display: none;">
             <p>
-              <label>Are you bringing adult guests?
+              <label>Are you bringing a guest?
                 <select
-                  name="bringing_guests"
-                  onchange="toggleGuestCount(this.value)"
+                  name="bringing_guest"
+                  onchange="toggleGuestDetails(this.value)"
                 >
-                  <option value="no">No additional guests</option>
-                  <option value="yes">Yes, I will bring guests</option>
+                  <option value="no">No, I'm coming alone</option>
+                  <option value="yes">Yes, I will bring a guest</option>
                 </select>
               </label>
             </p>
 
-            <p id="guestCountSection" style="display: none;">
-              <label>Number of adult guests
-                <select name="guest_count">
-                  <option value="0">Select number of guests</option>
-                  <option value="1">1 guest</option>
-                  <option value="2">2 guests</option>
-                  <option value="3">3 guests</option>
-                  <option value="4">4 guests</option>
-                </select>
-              </label>
-            </p>
+            <div id="guestDetailsSection" style="display: none;">
+              <p>
+                <label>Guest's First Name
+                  <input
+                    type="text"
+                    name="guest_firstname"
+                  />
+                </label>
+              </p>
+              
+              <p>
+                <label>Guest's Last Name
+                  <input
+                    type="text"
+                    name="guest_lastname"
+                  />
+                </label>
+              </p>
+            </div>
 
             <p>
-              <label
-                >Are you bringing children? (The venue features a farm with friendly animals)
+              <label>Are you bringing children? (The venue features a farm with friendly animals)
                 <select
                   name="bringing_children"
-                  onchange="toggleChildCount(this.value)"
+                  onchange="toggleChildDetails(this.value)"
                 >
                   <option value="no">No children</option>
                   <option value="yes">Yes, I will bring children</option>
@@ -426,17 +454,22 @@
               </label>
             </p>
 
-            <p id="childCountSection" style="display: none;">
-              <label>Number of children
-                <select name="child_count">
-                  <option value="0">Select number of children</option>
-                  <option value="1">1 child</option>
-                  <option value="2">2 children</option>
-                  <option value="3">3 children</option>
-                  <option value="4">4 children</option>
-                </select>
-              </label>
-            </p>
+            <div id="childDetailsSection" style="display: none;">
+              <p>
+                <label>Number of children
+                  <select name="child_count">
+                    <option value="1">1 child</option>
+                    <option value="2">2 children</option>
+                  </select>
+                </label>
+              </p>
+            </div>
+          </div>
+
+          <!-- Gift information -->
+          <div class="donation-info">
+            <p>If you prefer to give a wedding gift electronically, you may send it to:</p>
+            <p class="paypal-info">PayPal: xx@gmail.com</p>
           </div>
 
           <!-- Navigation buttons -->
@@ -559,29 +592,41 @@
 
       if (value !== "yes") {
         // Reset guest-related fields if "No"
-        document.querySelector('[name="bringing_guests"]').value = "no";
-        document.querySelector('[name="guest_count"]').value = "";
+        document.querySelector('[name="bringing_guest"]').value = "no";
         document.querySelector('[name="bringing_children"]').value = "no";
-        document.querySelector('[name="child_count"]').value = "";
-        document.getElementById("guestCountSection").style.display = "none";
-        document.getElementById("childCountSection").style.display = "none";
+        
+        // Hide sub-sections
+        document.getElementById("guestDetailsSection").style.display = "none";
+        document.getElementById("childDetailsSection").style.display = "none";
+        
+        // Clear guest fields
+        if (document.querySelector('[name="guest_firstname"]')) {
+          document.querySelector('[name="guest_firstname"]').value = "";
+        }
+        if (document.querySelector('[name="guest_lastname"]')) {
+          document.querySelector('[name="guest_lastname"]').value = "";
+        }
       }
     }
 
-    function toggleGuestCount(value) {
-      const guestCountSection = document.getElementById("guestCountSection");
-      guestCountSection.style.display = value === "yes" ? "block" : "none";
+    function toggleGuestDetails(value) {
+      const guestDetailsSection = document.getElementById("guestDetailsSection");
+      guestDetailsSection.style.display = value === "yes" ? "block" : "none";
+      
+      // Clear guest fields if "no"
       if (value === "no") {
-        document.querySelector('[name="guest_count"]').value = "";
+        if (document.querySelector('[name="guest_firstname"]')) {
+          document.querySelector('[name="guest_firstname"]').value = "";
+        }
+        if (document.querySelector('[name="guest_lastname"]')) {
+          document.querySelector('[name="guest_lastname"]').value = "";
+        }
       }
     }
 
-    function toggleChildCount(value) {
-      const childCountSection = document.getElementById("childCountSection");
-      childCountSection.style.display = value === "yes" ? "block" : "none";
-      if (value === "no") {
-        document.querySelector('[name="child_count"]').value = "";
-      }
+    function toggleChildDetails(value) {
+      const childDetailsSection = document.getElementById("childDetailsSection");
+      childDetailsSection.style.display = value === "yes" ? "block" : "none";
     }
 
     // Simple Netlify form submission & success overlay
